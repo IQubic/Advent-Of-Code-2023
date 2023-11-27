@@ -45,7 +45,7 @@ isValid (P vec) = V.and
   where
     n = V.length vec
 
--- | Apply a permutation to a list of Ints
+-- | Apply a permutation and get a list of ints
 runPerm :: KnownNat n => Perm n -> [Int]
 runPerm = runPermOn id
 
