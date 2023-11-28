@@ -1,6 +1,3 @@
-{-# LANGUAGE BangPatterns #-}
-{-# LANGUAGE ImportQualifiedPost #-}
-
 module Common.Search where
 
 import Data.Foldable (foldl')

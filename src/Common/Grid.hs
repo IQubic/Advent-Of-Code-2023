@@ -1,8 +1,4 @@
-{-# LANGUAGE ImportQualifiedPost #-}
 {-# LANGUAGE AllowAmbiguousTypes #-}
-{-# LANGUAGE ScopedTypeVariables #-}
-{-# LANGUAGE FlexibleContexts #-}
-{-# LANGUAGE TypeApplications #-}
 
 module Common.Grid ( module Common.Grid
                    , module Linear.V2

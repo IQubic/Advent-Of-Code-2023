@@ -1,8 +1,5 @@
-{-# LANGUAGE KindSignatures #-}
-{-# LANGUAGE DataKinds #-}
-{-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE RoleAnnotations #-}
-{-# LANGUAGE ImportQualifiedPost #-}
+{-# LANGUAGE DataKinds #-}
 
 module Common.Permutation
   ( Perm

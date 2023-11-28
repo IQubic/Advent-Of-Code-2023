@@ -1,9 +1,3 @@
-{-# LANGUAGE BangPatterns #-}
-{-# LANGUAGE RankNTypes #-}
-{-# LANGUAGE ScopedTypeVariables #-}
-{-# LANGUAGE TupleSections #-}
-{-# LANGUAGE ImportQualifiedPost #-}
-
 module Common.Util ( module Common.Util
                    ) where
 import Data.List
