@@ -6,7 +6,7 @@ import Data.Char (isDigit, digitToInt)
 -- Drop all the letters, then find the first and last digits
 part1 :: String -> Int
 part1 = sum
-      . map (read @Int . (\xs -> [head xs, last xs]) . filter isDigit)
+      . map (read . (\xs -> [head xs, last xs]) . filter isDigit)
       . lines
 
 part2 :: String -> Int
@@ -15,6 +15,8 @@ part2 = sum
       . lines
   where
     -- Find all the digits of any type
+    -- The recursive calls need to remember the last letter so
+    -- cases like "twone" can find the "one" properly and not skip the initial o
     getNumbers :: String -> [Int]
     getNumbers [] = []
     getNumbers ('z':'e':'r':'o':cs)     = 0 : getNumbers ('o':cs)
