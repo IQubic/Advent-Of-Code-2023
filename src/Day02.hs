@@ -2,47 +2,40 @@ module Day02 where
 
 import Common.Runner
 import Common.Parser
-import Data.Semigroup
-import Data.Maybe (mapMaybe)
-import Data.Bifunctor (second)
-import Data.Map (Map)
-import Data.Map qualified as M
+import Linear.V3
+import Data.Functor ((<&>))
+import Control.Applicative (liftA2)
+import Data.Maybe (fromMaybe, mapMaybe)
 
 part1 :: String -> Int
 part1 = sum
-      . mapMaybe (\(Game n xs) -> if validGame xs then Just n else Nothing)
+      . mapMaybe (\(n, xs) -> if all validPull xs then Just n else Nothing)
       . pInput
   where
-    validGame = all validPull
-    validPull = all validColor
-    validColor (R, n) = n <= 12
-    validColor (G, n) = n <= 13
-    validColor (B, n) = n <= 14
+    -- Run a pairwise comparison
+    validPull = and . liftA2 (>=) (V3 12 13 14)
 
 part2 :: String -> Int
 part2 = sum
-      . map (\(Game _ xs) -> power xs)
+      . map (\(_, xs) -> power xs)
       . pInput
   where
-    -- power uses a Map to store the max seen for each color
+    -- For each color, get the largest quantity ever pulled
     power :: [Pull] -> Int
-    power xs = let pulls = M.unionsWith (<>) (map pullSummary xs) in
-      product $ fmap getMax pulls
-    -- Use Max to compute the max
-    pullSummary :: [Cube] -> Map Color (Max Int)
-    pullSummary = M.fromList . map (second Max)
+    power = product . foldr (liftA2 max) 0
 
-data Game  = Game Int [Pull]
-type Pull  = [Cube]
-type Cube  = (Color, Int)
+-- Store in RGB order, with 0 as default
+type Game  = (Int, [Pull])
+type Pull  = V3 Int
 data Color = R | G | B deriving (Eq, Ord, Show)
 
 pInput :: String -> [Game]
 pInput = pLines $ do
   id <- string "Game " *> pNumber <* string ": "
-  Game id <$> pPull `sepBy1` string "; "
+  pulls <- pPull `sepBy1` string "; "
+  pure (id, pulls)
     where
-      pPull = pCube `sepBy1` string ", "
+      pPull = toV3 <$> pCube `sepBy1` string ", "
       pCube = do
         n <- pNumber <* space
         c <- choice [ string "red"   $> R
@@ -50,6 +43,9 @@ pInput = pLines $ do
                     , string "green" $> G
                     ]
         pure (c, n)
+      -- Store data in RGB order with 0 as default
+      toV3 :: [(Color, Int)] -> V3 Int
+      toV3 cs = V3 R G B <&> \c -> fromMaybe 0 (lookup c cs)
 
 solve :: Show a => (String -> a) -> IO (Either AoCError a)
 solve = runSolutionOnInput 2
